@@ -99,6 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _gameEnd = false;
       for (int i = 0; i < 9; i++) boxes[i] = ' ';
     });
+
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
   void _winner() {
@@ -113,26 +115,30 @@ class _MyHomePageState extends State<MyHomePage> {
       // Create a grid with 3 columns. If you change the scrollDirection to
       // horizontal, this produces 3 rows.
       crossAxisCount: 3,
+      childAspectRatio: 1.0,
+
       // Generate 9 widgets that display their index in the List.
       children: List.generate(9, (index) {
-        return GestureDetector(
-          onTap: () =>
-              [_handleTap(index), if (_gameEnd) showAlertDialog(context)],
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 0.5)),
-            child: Text(
-              boxes[index],
-              style: TextStyle(
-                fontSize: 50.0,
+         Color textColor = boxes[index] == 'X' ? Color.fromARGB(255, 252, 26, 117) : Color.fromARGB(255, 11, 212, 71);
+          return GestureDetector(
+            onTap: () =>
+                [_handleTap(index), if (_gameEnd) showAlertDialog(context)],
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.tealAccent, width: 0.5 )),
+              child: Text(
+                boxes[index],
+                style: TextStyle(
+                  fontSize: 50.0,
+                  color: textColor
+                ),
               ),
             ),
-          ),
-        );
-      }),
-    );
-  }
+          );
+        }),
+      );
+    }
 
   showAlertDialog(BuildContext context) {
     // set up the button
@@ -163,23 +169,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.title), actions: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: _reset,
-                child: Icon(
-                  Icons.restart_alt,
-                  size: 26.0,
-                ),
-              )),
-        ]),
-        body: Column(
-          children: <Widget>[
-            Flexible(
-              child: _GameArea(context),
+        backgroundColor: Colors.black ,
+        body: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.07,
+            vertical: MediaQuery.of(context).size.height * 0.07
             ),
-          ],
-        ));
+            child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(50),
+                  child: _GameArea(context),
+                ),
+              ),
+            ],
+        )));
   }
 }
